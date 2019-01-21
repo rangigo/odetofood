@@ -9,7 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace OdeToFood
 {
+    using Microsoft.AspNetCore.Routing;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
 
     public class Startup
     {
@@ -18,21 +20,33 @@ namespace OdeToFood
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IGreeter, Greeter>();
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IGreeter greeter)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IGreeter greeter, ILogger<Startup> logger)
         {
-            //if (env.IsDevelopment())
-            //{
-            //    app.UseDeveloperExceptionPage();
-            //}
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseStaticFiles();
+            app.UseMvc(ConfigureRoutes);
 
             app.Run(async (context) =>
             {
                 var greeting = greeter.GetMessageOfTheDay();
-                await context.Response.WriteAsync(greeting);
+                context.Response.ContentType = "text/plain";
+                await context.Response.WriteAsync($"not found");
             });
+        }
+
+        private void ConfigureRoutes(IRouteBuilder routerBuilder)
+        {
+            // /Home/Index
+            
+            routerBuilder.MapRoute("Default", "{controller=Home}/{action=Index}/{id?}");
         }
     }
  
