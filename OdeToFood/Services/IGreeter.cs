@@ -1,4 +1,4 @@
-﻿namespace OdeToFood
+﻿namespace OdeToFood.Services
 {
     using Microsoft.Extensions.Configuration;
 
