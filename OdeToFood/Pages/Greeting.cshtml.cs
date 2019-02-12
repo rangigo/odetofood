@@ -19,9 +19,9 @@ namespace OdeToFood.Pages
             _greeter = greeter;
         }
 
-        public void OnGet()
+        public void OnGet(string name)
         {
-            CurrentGreeting = _greeter.GetMessageOfTheDay();
+            CurrentGreeting = $"{name}: {_greeter.GetMessageOfTheDay()}";
         }
     }
 }
